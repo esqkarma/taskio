@@ -1,16 +1,17 @@
-# clima
+# 📋 Taskio
 
-A new Flutter project.
+**Taskio** is a sleek and minimal task management app built with **Flutter**, designed to help users manage their tasks effectively with a modern UI. It supports upcoming tasks, ongoing task tracking with timers, and smooth animations for an intuitive user experience.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+- ✅ Add upcoming tasks with a title and estimated time
+- ⏱ Ongoing task timer with animated progress
+- 🌙 Clean UI built using custom colors and fonts
+- 🧠 Provider-based state management
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** – for app development
+- **Provider** – for state management
+- **Dart** – language used
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
