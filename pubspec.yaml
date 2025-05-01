@@ -38,6 +38,8 @@ dependencies:
   provider: ^6.1.4
   intl: ^0.18.1
   material_symbols_icons: ^4.0.0
+  audioplayers: ^6.4.0
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
@@ -60,3 +62,5 @@ flutter:
     - family: Cagody
       fonts:
         - asset: fonts/CagodydemoRegular-BL7O8.otf
+  assets:
+    - assets/sounds/

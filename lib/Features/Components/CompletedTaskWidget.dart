@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Provider/TaskProvider.dart';
-import '../../Provider/TimeProvider.dart';
 import 'ColorPalate.dart';
 
 
-class Completedtask extends StatelessWidget {
-  const Completedtask({super.key});
+class CompletedTaskWidget extends StatelessWidget {
+  const CompletedTaskWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +23,9 @@ class Completedtask extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
+                onLongPress: (){
+                  taskProvider.removeTask(index);
+                },
                 child: Container(
                   width: width,
                   height: width * 0.15,
@@ -54,6 +56,6 @@ class Completedtask extends StatelessWidget {
               ),
             );
           }
-        });;
+        });
   }
 }

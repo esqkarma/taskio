@@ -6,7 +6,6 @@ class DayDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get today's day
     String today = DateFormat('EEEE').format(DateTime.now());
 
     return Text(

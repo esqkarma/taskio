@@ -21,7 +21,6 @@ class _BottomBarState extends State<BottomBar> {
 
 
 
-   @override
    void disposeController() {
      captionController.dispose();
      timeController.dispose();

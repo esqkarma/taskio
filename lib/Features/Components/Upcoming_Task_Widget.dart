@@ -4,6 +4,7 @@ import 'package:taskio/Features/Components/ColorPalate.dart';
 import 'package:taskio/Features/Components/Custom_PopUp.dart';
 import 'package:taskio/Provider/TaskProvider.dart';
 import 'package:taskio/Provider/TimeProvider.dart';
+import 'package:taskio/Provider/soundProvider.dart';
 
 class UpcomingTaskWidget extends StatefulWidget {
   const UpcomingTaskWidget({super.key});
@@ -17,6 +18,7 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
   Widget build(BuildContext context) {
     final timeProvider = Provider.of<TimeProvider>(context);
     final taskProvider = Provider.of<TaskProvider>(context);
+    final soundProvider = Provider.of<SoundProvider>(context);
     double width = MediaQuery.of(context).size.width;
     return ListView.builder(
         itemCount: taskProvider.task.length,
@@ -38,7 +40,9 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
                 onHorizontalDragEnd: (detail) {
                   if (detail.primaryVelocity != null) {
                     if (detail.primaryVelocity! > 0) {
+                      soundProvider.taskDeletedsound();
                       taskProvider.removeTask(index);
+
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Removed Task'),
                         duration: Duration(milliseconds: 500),
