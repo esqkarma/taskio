@@ -35,5 +35,11 @@ await player.play(AssetSource('sounds/stopTimer.mp3'));
     await player.play(AssetSource('sounds/timeOver.mp3'));
 
   }
+  Future<void>taskAddedSound() async{
+
+    await player.play(AssetSource('sounds/taskAdded.mp3'));
+
+  }
+
   
 }

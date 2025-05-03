@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskio/Features/Components/ColorPalate.dart';
+import 'package:taskio/Features/Components/CustomSnackBar.dart';
 import 'package:taskio/Features/Components/Custom_PopUp.dart';
 import 'package:taskio/Provider/TaskProvider.dart';
 import 'package:taskio/Provider/TimeProvider.dart';
@@ -43,10 +44,7 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
                       soundProvider.taskDeletedsound();
                       taskProvider.removeTask(index);
 
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Removed Task'),
-                        duration: Duration(milliseconds: 500),
-                      ));
+                     showCustomSnackBar(context, 'task removed');
                     } else if (detail.primaryVelocity! < 0) {
                       showDialog(
                           context: context,
@@ -57,48 +55,57 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
                   }
                 },
                 onTap: () {
+
+                  // making the task's ongoing = true and storing the output in ongoingStatus variable
                   bool ongoingStatus = taskProvider.setTaskOnGoingStatus(index);
                   timeProvider.remainingSeconds = int.tryParse(data.timer) ?? 0;
 
                   if (ongoingStatus) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                       backgroundColor: scaffoldBackgroundColor,
-                        duration: Duration(milliseconds: 300),
-                        content: Text('Ongoing task already exists!')));
+                    showCustomSnackBar(context, 'complete ongoing task');
                   } else {
-                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    //     duration: Duration(milliseconds: 300),
-                    //     content: Text('Task added')));
+                    soundProvider.taskAddedSound();
+                  showCustomSnackBar(context, 'task added');
                   }
                 },
+                onLongPress: (){},
                 child: Container(
-                  width: width,
-                  height: width * 0.15,
-                  decoration: BoxDecoration(
-                      color: onGoingTaskCardColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: SizedBox(
-                    width: width * 0.60,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            data.task,
-                            style: TextStyle(overflow: TextOverflow.fade),
-                          ),
-                          Text('${data.timer} min',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                  overflow: TextOverflow.fade,
-                                  color: Colors.black))
-                        ],
+                width: width,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: onGoingTaskCardColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      data.task,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        fontFamily: 'Cagody',
                       ),
+                      softWrap: true,
                     ),
-                  ),
+                    SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${data.timer} min',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+
+            ),
             );
           }
         });

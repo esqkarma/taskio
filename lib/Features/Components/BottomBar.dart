@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskio/Features/Components/ColorPalate.dart';
+import 'package:taskio/Features/Components/CustomSnackBar.dart';
 import 'package:taskio/Features/Components/Custom_TextField.dart';
 import 'package:taskio/Provider/pageSwitchProvider.dart';
 
@@ -21,11 +22,18 @@ class _BottomBarState extends State<BottomBar> {
 
 
 
+ @override
    void disposeController() {
      captionController.dispose();
      timeController.dispose();
      super.dispose();
    }
+ @override
+ void dispose() {
+   focusNode1.dispose();
+   focusNode2.dispose();
+   super.dispose();
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -36,28 +44,31 @@ class _BottomBarState extends State<BottomBar> {
     final taskProvider = Provider.of<TaskProvider>(context);
     final pageSwitchProvider = Provider.of<PageSwitchProvider>(context);
 
-//This function is used to pass the user input from this class to CustomTextfield Class
+//This function is used to pass the user input from this class to list
     void passingFunction()
     {
       if (captionController.text.isNotEmpty && timeController.text.isNotEmpty) {
-        taskProvider.addTask(captionController.text.toString(),
-            timeController.text.toString());
+        if(taskProvider.task.isEmpty)
+          {
+            taskProvider.addTask(captionController.text.toString(), timeController.text.toString(),isOngoing: true);
+          }
+        else
+          {
+            taskProvider.addTask(captionController.text.toString(), timeController.text.toString(),isOngoing: false);
+          }
+         FocusScope.of(context).unfocus();
         captionController.clear();
         timeController.clear();
 
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
 
-          backgroundColor: scaffoldBackgroundColor,
-
-             shape: RoundedRectangleBorder(
-               borderRadius: BorderRadius.vertical(top: Radius.circular(20))
-             ),
-          content: Text('Add a Task'),
-          duration: Duration(milliseconds: 800),
-        ));
+      } else
+        if(captionController.text.isNotEmpty){
+        showCustomSnackBar(context, 'Please add time');
       }
-     FocusScope.of(context).unfocus();
+        else
+          {
+            showCustomSnackBar(context, 'Please add a task');
+          }
     }
 
 
@@ -79,9 +90,9 @@ class _BottomBarState extends State<BottomBar> {
       },
       child: pageSwitchProvider.isUpcoming
           ? Row(
-        key: ValueKey(true),
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+                  key: ValueKey(true),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
           Container(
             height: width * 0.15,
             width: width * 0.80,
@@ -100,7 +111,7 @@ class _BottomBarState extends State<BottomBar> {
                     height: height,
                     width: width,
                     textInputType: TextInputType.text,
-                    maxLength: 25,
+                    maxLength: 40,
                     function: () {
                       FocusScope.of(context).requestFocus(focusNode2);
                     },
@@ -139,8 +150,8 @@ class _BottomBarState extends State<BottomBar> {
                   color: Colors.white, size: 35),
             ),
           ),
-        ],
-      )
+                  ],
+                )
           : SizedBox.shrink(key: ValueKey(false)),
     );
 

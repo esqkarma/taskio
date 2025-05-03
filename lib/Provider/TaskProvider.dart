@@ -7,6 +7,16 @@ class TaskProvider extends ChangeNotifier {
 
   List<TaskModel> get task => taskTable;
 
+
+  int onGoingTaskIndex(){
+    return task.indexWhere((task) => task.isOngoing);
+
+  }
+  bool isThereonGoingTask(){
+    return task.any((task)=>task.isOngoing);
+  }
+
+
   //This function is used to change the Ongoing criteria of a task.
   //Going to use this function in the upcoming task section,
   // whenever user clicks on top of a task the Ongoing variable will change to true
@@ -27,22 +37,31 @@ class TaskProvider extends ChangeNotifier {
       return false;
     }
   }
-  void setTaskCompletedStatus(int index) {
 
-      final data = task[index];
-      data.isCompleted = true;
-      data.isOngoing=false;
-      notifyListeners();
-
+  void setTaskCompletedStatus(int index,bool option) {
+    final data = task[index];
+    if(option)
+      {
+        data.isCompleted = option;
+        data.isOngoing =false;
+        notifyListeners();
+      }
+    else{
+      data.isOngoing =true;
+    }
 
   }
 
-  void addTask(String task, String time, {bool isOngoing = false,bool isCompleted =false}) {
-    TaskModel taskmodel =
-        TaskModel(task: task, timer: time, isOngoing: isOngoing,isCompleted: isCompleted);
+  void addTask(String task, String time,
+      {bool isOngoing = false, bool isCompleted = false}) {
+    TaskModel taskmodel = TaskModel(
+        task: task,
+        timer: time,
+        isOngoing: isOngoing,
+        isCompleted: isCompleted);
     taskTable.add(taskmodel);
-    print(taskTable);
     notifyListeners();
+
   }
 
   void removeTask(int index) {
@@ -51,7 +70,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   void updateTask(int index, String taskName, String time,
-      {bool isOngoing = false,bool isCompleted = false}) {
+      {bool isOngoing = false, bool isCompleted = false}) {
     final data = task[index];
     data.task = taskName;
     data.timer = time;

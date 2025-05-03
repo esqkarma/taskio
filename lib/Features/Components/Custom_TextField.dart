@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomTextfield extends StatelessWidget {
   final String? hintText;
   final double? height;
@@ -23,10 +24,9 @@ class CustomTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     return Container(
-      height: height ?? 70, // Adjust the height here
+      height: height ?? 100, // Adjust the height here
       width: width ?? wt * 0.70, // Adjust the width here
       decoration: BoxDecoration(
         // Border with dynamic size
@@ -34,16 +34,18 @@ class CustomTextfield extends StatelessWidget {
       ),
       child: TextField(
         maxLength: maxLength ?? 20,
-        keyboardType: textInputType ?? TextInputType.none,
+        keyboardType:  textInputType??TextInputType.multiline,
         showCursor: true,
-        maxLines: 5,
+        maxLines: null,
         controller: customController,
         onEditingComplete:function,
         focusNode: focusNode,
+        onTapUpOutside: (_)=>FocusManager.instance.primaryFocus?.unfocus(),
 
         decoration: InputDecoration(
           hintFadeDuration: Duration(milliseconds: 250),
           hintMaxLines: 1,
+
 
           hintStyle: TextStyle(
             fontFamily: 'Cagody',

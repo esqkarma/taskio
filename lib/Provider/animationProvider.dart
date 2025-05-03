@@ -20,4 +20,9 @@ class ConfettiProvider extends ChangeNotifier {
     _controller.dispose();
     super.dispose();
   }
+
+  void showPopUP()
+  {
+}
+
 }

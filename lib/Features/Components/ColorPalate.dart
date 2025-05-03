@@ -8,3 +8,5 @@ final Color textColorUpcomg = Color(0xFFC5C5ED);
 final Color typeHereColor = Color(0xFFC5C5ED);
 final Color timeReq = Color(0xFFC5C5ED);
 final Color bottomBarButtonColor = Color(0xFF4b4bb4);
+
+final Color snackBarColor = Color(0xFF21213B);
