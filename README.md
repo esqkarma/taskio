@@ -16,3 +16,6 @@
 - **Dart** – language used
 - **Hive** - Database
 
+
+
+**please find the apk file in assest/apkFile folder**
