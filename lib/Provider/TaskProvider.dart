@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:hive_ce/hive.dart';
 import '../Model/Todo_Model.dart';
 
 class TaskProvider extends ChangeNotifier {
+  final box = Hive.box('tasks');
   List<TaskModel> taskTable = [];
 
-  List<TaskModel> get task => taskTable;
+  List<TaskModel> get task => box.values.cast<TaskModel>().toList();
 
 
   int onGoingTaskIndex(){
@@ -15,7 +16,12 @@ class TaskProvider extends ChangeNotifier {
   bool isThereonGoingTask(){
     return task.any((task)=>task.isOngoing);
   }
-
+void setTaskOnGoingFalse(int index)
+{
+  final TaskModel data = box.getAt(index);
+  data.isOngoing = false;
+  notifyListeners();
+}
 
   //This function is used to change the Ongoing criteria of a task.
   //Going to use this function in the upcoming task section,
@@ -39,7 +45,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   void setTaskCompletedStatus(int index,bool option) {
-    final data = task[index];
+    final TaskModel data = box.getAt(index);
     if(option)
       {
         data.isCompleted = option;
@@ -47,9 +53,13 @@ class TaskProvider extends ChangeNotifier {
         notifyListeners();
       }
     else{
-      data.isOngoing =true;
+      data.isOngoing = true;
+      data.isCompleted = false;
+      notifyListeners();
     }
 
+box.putAt(index, data);
+    notifyListeners();
   }
 
   void addTask(String task, String time,
@@ -59,23 +69,25 @@ class TaskProvider extends ChangeNotifier {
         timer: time,
         isOngoing: isOngoing,
         isCompleted: isCompleted);
-    taskTable.add(taskmodel);
+
+      box.add(taskmodel);
     notifyListeners();
 
   }
 
   void removeTask(int index) {
-    taskTable.removeAt(index);
+    box.deleteAt(index);
     notifyListeners();
   }
 
   void updateTask(int index, String taskName, String time,
       {bool isOngoing = false, bool isCompleted = false}) {
-    final data = task[index];
+    final TaskModel data = box.getAt(index);
     data.task = taskName;
     data.timer = time;
     data.isOngoing = isOngoing;
     data.isCompleted = isCompleted;
+    box.putAt(index, data);
     notifyListeners();
   }
 }

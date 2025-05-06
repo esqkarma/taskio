@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskio/Features/Components/ColorPalate.dart';
 import 'package:taskio/Features/Components/CustomSnackBar.dart';
-import 'package:taskio/Features/Components/Custom_PopUp.dart';
+import 'package:taskio/Features/Components/UpdateTaskPopUP.dart';
+import 'package:taskio/Model/Todo_Model.dart';
 import 'package:taskio/Provider/TaskProvider.dart';
 import 'package:taskio/Provider/TimeProvider.dart';
 import 'package:taskio/Provider/soundProvider.dart';
@@ -22,19 +23,20 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
     final soundProvider = Provider.of<SoundProvider>(context);
     double width = MediaQuery.of(context).size.width;
     return ListView.builder(
-        itemCount: taskProvider.task.length,
+        itemCount: taskProvider.box.length,
         itemBuilder: (context, index) {
-          final data = taskProvider.task[index];
+          final TaskModel data = taskProvider.box.getAt(index);
 
           if (data.isOngoing ) {
             return SizedBox.shrink();
           }
-            else if(data.isCompleted)
-              {
-                return SizedBox.shrink();
-              }
+          else if(data.isCompleted )
+            {
 
-          else {
+              return SizedBox.shrink();
+            }
+
+          else{
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
@@ -48,26 +50,25 @@ class _UpcomingTaskWidgetState extends State<UpcomingTaskWidget> {
                     } else if (detail.primaryVelocity! < 0) {
                       showDialog(
                           context: context,
-                          builder: (context) => PopUpScreen(
+                          builder: (context) => UpdateTaskPopUpScreen(
                                 index: index,
                               ));
                     }
                   }
                 },
                 onTap: () {
-
                   // making the task's ongoing = true and storing the output in ongoingStatus variable
                   bool ongoingStatus = taskProvider.setTaskOnGoingStatus(index);
-                  timeProvider.remainingSeconds = int.tryParse(data.timer) ?? 0;
+
 
                   if (ongoingStatus) {
-                    showCustomSnackBar(context, 'complete ongoing task');
+                    showCustomSnackBar(context, 'complete the ongoing task');
                   } else {
                     soundProvider.taskAddedSound();
+                    timeProvider.remainingSeconds = int.tryParse(data.timer) ?? 0;
                   showCustomSnackBar(context, 'task added');
                   }
                 },
-                onLongPress: (){},
                 child: Container(
                 width: width,
                 padding: const EdgeInsets.all(12),

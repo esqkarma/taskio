@@ -1,0 +1,2 @@
+C:/Projects 2025/taskio/android/app/.cxx/RelWithDebInfo/1w1j1x32/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Projects 2025/taskio/android/app/.cxx/RelWithDebInfo/1w1j1x32/armeabi-v7a/CMakeFiles/rebuild_cache.dir

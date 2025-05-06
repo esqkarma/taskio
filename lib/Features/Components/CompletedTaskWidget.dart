@@ -18,6 +18,7 @@ class CompletedTaskWidget extends StatelessWidget {
     return ListView.builder(
         itemCount: taskProvider.task.length,
         itemBuilder: (context, index) {
+
           final data = taskProvider.task[index];
 
           if (!data.isCompleted) {
@@ -31,7 +32,6 @@ class CompletedTaskWidget extends StatelessWidget {
                  taskProvider.removeTask(index);
                 },
                 child:Container(
-                  width: width,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: onGoingTaskCardColor,

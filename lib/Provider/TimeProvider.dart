@@ -18,7 +18,7 @@ class TimeProvider extends ChangeNotifier{
     if (isRunning) return;
     if (inputTime == null) return;
 
-    remainingSeconds = inputTime;
+    remainingSeconds = inputTime*60;
     totalSeconds = remainingSeconds;
     if (remainingSeconds < 0) return;
 

@@ -26,37 +26,41 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     return Container(
-      height: height ?? 100, // Adjust the height here
+      constraints: BoxConstraints(
+        maxHeight: wt*0.70
+      ),
+      // Adjust the height here
       width: width ?? wt * 0.70, // Adjust the width here
       decoration: BoxDecoration(
         // Border with dynamic size
         borderRadius: BorderRadius.circular(12),
       ),
-      child: TextField(
-        maxLength: maxLength ?? 20,
-        keyboardType:  textInputType??TextInputType.multiline,
-        showCursor: true,
-        maxLines: null,
-        controller: customController,
-        onEditingComplete:function,
-        focusNode: focusNode,
-        onTapUpOutside: (_)=>FocusManager.instance.primaryFocus?.unfocus(),
+      child: SingleChildScrollView(
+        child: TextField(
+          maxLength: maxLength ?? 200,
+          keyboardType:  textInputType??TextInputType.multiline,
+          showCursor: true,
+          maxLines: null,
+          controller: customController,
+          onEditingComplete:function,
+          focusNode: focusNode,
+          onTapUpOutside: (_)=>FocusManager.instance.primaryFocus?.unfocus(),
 
-        decoration: InputDecoration(
-          hintFadeDuration: Duration(milliseconds: 250),
-          hintMaxLines: 1,
+          decoration: InputDecoration(
+            hintFadeDuration: Duration(milliseconds: 250),
+            hintMaxLines: 1,
 
-
-          hintStyle: TextStyle(
-            fontFamily: 'Cagody',
-                letterSpacing: 1,
-                color: Colors.grey[600]
+            hintStyle: TextStyle(
+              fontFamily: 'Cagody',
+                  letterSpacing: 1,
+                  color: Colors.grey[600]
+            ),
+            hintText: hintText,
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            border: InputBorder.none,
+            // Remove default border
+            counterText: '',
           ),
-          hintText: hintText,
-          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          border: InputBorder.none,
-          // Remove default border
-          counterText: '',
         ),
       ),
     );

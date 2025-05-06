@@ -48,7 +48,7 @@ class _BottomBarState extends State<BottomBar> {
     void passingFunction()
     {
       if (captionController.text.isNotEmpty && timeController.text.isNotEmpty) {
-        if(taskProvider.task.isEmpty)
+        if(taskProvider.box.isEmpty)
           {
             taskProvider.addTask(captionController.text.toString(), timeController.text.toString(),isOngoing: true);
           }
@@ -111,7 +111,7 @@ class _BottomBarState extends State<BottomBar> {
                     height: height,
                     width: width,
                     textInputType: TextInputType.text,
-                    maxLength: 40,
+                    maxLength:200,
                     function: () {
                       FocusScope.of(context).requestFocus(focusNode2);
                     },

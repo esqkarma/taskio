@@ -9,6 +9,7 @@ import 'package:taskio/Provider/soundProvider.dart';
 
 import '../../Provider/TaskProvider.dart';
 import '../../Provider/animationProvider.dart';
+import 'DayDisplay.dart';
 
 class OnGoingTaskSection extends StatefulWidget {
   OnGoingTaskSection({super.key});
@@ -47,29 +48,28 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
                 final index = taskProvider.onGoingTaskIndex();
 
                 //Checking whether the list is empty or not
-                if (taskProvider.task.isEmpty) {
+                if (taskProvider.box.isEmpty) {
                   showCustomSnackBar(context, 'add a task');
                 }
                 //checking whether there is onGoingTask=true task available
-                else if(index<0)
-                  {
-                    showCustomSnackBar(context, 'start a task');
-                  }
-
-                else if(timerProvider.remainingSeconds < timerProvider.totalSeconds/2 && !timerProvider.isRunning)
-
-                      {
-                        soundProvider.taskCompletedsound();
-                        confettiProvider.playConfetti();
-                        taskProvider.setTaskCompletedStatus(index,true);
-                        timerProvider.stopTimer();
-                      }
-                      else
-                        {
-                        showCustomSnackBar(context, 'try to complete the task');
-                        }},
-
-
+                else if (index < 0) {
+                  showCustomSnackBar(context, 'start a task');
+                } else if (timerProvider.remainingSeconds < timerProvider.totalSeconds / 2 && !timerProvider.isRunning ) {
+                  soundProvider.taskCompletedsound();
+                  confettiProvider.playConfetti();
+                  taskProvider.setTaskCompletedStatus(index, true);
+                  timerProvider.stopTimer();
+                } else {
+                  showCustomSnackBar(context, 'try to complete the task');
+                }
+              },
+              onDoubleTap: () {
+                //Double tap on onGoingTaskCard makes that task's onGoing criteria flase
+                // and droped down to UpcomingTask section,Timer also stops
+                final index = taskProvider.onGoingTaskIndex();
+                taskProvider.setTaskOnGoingFalse(index);
+                timerProvider.stopTimer();
+              },
               child: Container(
                 height: width * 0.35,
                 width: width * 0.70,
@@ -81,9 +81,9 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
                     //checking whether the List is empty and showing accordingly
                     child: taskProvider.isThereonGoingTask()
                         ? ListView.builder(
-                            itemCount: taskProvider.task.length,
+                            itemCount: taskProvider.box.length,
                             itemBuilder: (BuildContext ctx, index) {
-                              final data = taskProvider.task[index];
+                              final data = taskProvider.box.getAt(index);
 
                               if (data.isOngoing) {
                                 inputTime = int.tryParse(data.timer);
@@ -112,6 +112,9 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
               )),
           GestureDetector(
             onTap: () {
+              if(!taskProvider.isThereonGoingTask()){
+                showCustomSnackBar(context, 'Add a Task');
+              }
               //⏸️Condition To pause Timer
               if (timerProvider.isRunning) {
                 soundProvider.pauseTimerSound();
@@ -120,7 +123,6 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
               //⏯️Condition to Resume Timer
               if (timerProvider.isPaused && !timerProvider.isRunning) {
                 soundProvider.resumeTimerSound();
-
                 timerProvider.resumeTimer(
                   onLastTenSeconds: soundProvider.lastFiveSecondSound,
                   timeOverSound: soundProvider.timeOverSound,
@@ -129,8 +131,7 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       showDialog(
                         context: context,
-                        builder: (context) => TaskComplitionPopUP(
-                        ),
+                        builder: (context) => TaskComplitionPopUP(),
                       );
                     });
                   },
@@ -176,20 +177,26 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
                       color: timeAnimationColor,
                       borderRadius: BorderRadius.circular(15)),
                   child: timerProvider.isRunning
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 1000),
-                            height: width * 0.35 * progress,
-                            decoration: BoxDecoration(
-                              color: Color.lerp(Color(0xFF1B1B85),
-                                  Color(0xFF4B4BB4), progress),
-                              borderRadius: BorderRadius.circular(15),
+                      ? Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 1000),
+                                height: width * 0.35 * progress,
+                                decoration: BoxDecoration(
+                                  color: Color.lerp(Color(0xFF1B1B85),
+                                      Color(0xFF4B4BB4), progress),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
                             ),
-                            child: Center(
+                            Center(
                                 child: Text(
-                                    timerProvider.remainingSeconds.toString())),
-                          ),
+                              formatTime(timerProvider.remainingSeconds),
+                              style:  TextStyle(color: timerProvider.remainingSeconds<timerProvider.totalSeconds/2? scaffoldTopDarkColor:onGoingTaskCardColor,fontSize: 18),
+                            ))
+                          ],
                         )
                       : Icon(
                           timerProvider.isPaused

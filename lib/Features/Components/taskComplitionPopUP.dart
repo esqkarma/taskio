@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskio/Features/Components/ColorPalate.dart';
 import 'package:taskio/Features/Components/CustomSnackBar.dart';
+import 'package:taskio/Model/Todo_Model.dart';
 import 'package:taskio/Provider/TaskProvider.dart';
 import '../../Provider/TimeProvider.dart';
 import '../../Provider/animationProvider.dart';
 import '../../Provider/soundProvider.dart';
+import 'CustomSnackBar.dart';
 
 class TaskComplitionPopUP extends StatelessWidget {
   const TaskComplitionPopUP({super.key,});
@@ -26,11 +29,11 @@ class TaskComplitionPopUP extends StatelessWidget {
             width: width * 0.8,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: onGoingTaskCardColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
                   'Did you complete the task',
@@ -45,25 +48,20 @@ class TaskComplitionPopUP extends StatelessWidget {
                   children: [
                     GestureDetector(
                         onTap: () {
-
                           int? index = taskProvider.onGoingTaskIndex();
-                          taskProvider.setTaskCompletedStatus(index, false);
-
-
-                          taskProvider.task[index].isOngoing = false;
                           showCustomSnackBar(context, 'complete the task');
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             Navigator.pop(context);
                           });
 
                         },
-
-
-
-
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.red,
+                      child:  Container(
+                        width: width * 0.20 / 2,
+                        height: width * 0.35 / 4,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(245, 198, 198, 1.0),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(Icons.close),
                       ),
                     ),
                     GestureDetector(
@@ -80,10 +78,14 @@ class TaskComplitionPopUP extends StatelessWidget {
 
 
                       },
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
+                      child: Container(
+                      width: width * 0.18 / 2,
+                      height: width * 0.35 / 4,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(165, 214, 167, 1.0),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Icon(Icons.check),
+                    ),
                     )
                   ],
                 )
