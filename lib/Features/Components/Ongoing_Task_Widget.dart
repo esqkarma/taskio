@@ -140,7 +140,8 @@ class _OnGoingTaskSectionState extends State<OnGoingTaskSection> {
 
               //▶️Condition To Start Timer
               else {
-                //checking whether there is any ongoing task available, If yes, the time will be start
+                //checking whether there is any ongoing task available,
+                // If yes, the time will be start
                 bool isAnyTaskOngoing =
                     taskProvider.task.any((task) => task.isOngoing);
                 if (isAnyTaskOngoing) {
