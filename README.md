@@ -14,4 +14,5 @@
 - **Flutter** – for app development
 - **Provider** – for state management
 - **Dart** – language used
+- **Hive** - Database
 
